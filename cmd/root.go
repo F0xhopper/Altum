@@ -49,13 +49,12 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	// Config file flag
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.altum.yaml)")
 
-	rootCmd.PersistentFlags().String("daily_notes_folder", "Journal", "Folder name for daily notes")
-	rootCmd.PersistentFlags().String("date_format", "2006-01-02", "Date format for notes (Go time format)")
+	rootCmd.PersistentFlags().String("daily_notes_folder_path", "", "Path to the daily notes folder (required)")
+	rootCmd.PersistentFlags().String("date_format", "2006-01-02", "Date format for notes (Obsidian format)")
 
-	viper.BindPFlag("daily_notes_folder", rootCmd.PersistentFlags().Lookup("daily_notes_folder"))
+	viper.BindPFlag("daily_notes_folder_path", rootCmd.PersistentFlags().Lookup("daily_notes_folder_path"))
 	viper.BindPFlag("date_format", rootCmd.PersistentFlags().Lookup("date_format"))
 
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
@@ -72,7 +71,6 @@ func initConfig() {
 		}	
 		altumConfigDir := filepath.Join(configHome, "altum")
 		viper.AddConfigPath(altumConfigDir)
-		viper.AddConfigPath(".")
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
 	}
@@ -80,7 +78,6 @@ func initConfig() {
 	viper.SetEnvPrefix("ALTUM")
 	viper.AutomaticEnv()
 
-	viper.SetDefault("daily_notes_folder", "Journal")
 	viper.SetDefault("date_format", "2006-01-02")
 
 	if err := viper.ReadInConfig(); err == nil {
