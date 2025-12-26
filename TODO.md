@@ -17,3 +17,5 @@ Top performing days:
 Nov 15: 6.2h (★★★★★)
 Nov 08: 5.8h (★★★★☆)
 Nov 22: 5.1h (★★★★★)
+
+- [ ] Get the app to be a downloadable link on github to global
