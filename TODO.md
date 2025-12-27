@@ -1,6 +1,6 @@
 - [ ] Fix the copy on the descriptions and helper text
 - [ ] Add on the start command a animation or something then click enter to stop
-- [ ] Try and get the app to write to today's note
+- [x] Try and get the app to write to today's note
 - [ ] Create a report/analyse subcommand with argument of days or months or time frame that prints something like
       Deep Work Report: November 2025
 
@@ -19,3 +19,4 @@ Nov 08: 5.8h (★★★★☆)
 Nov 22: 5.1h (★★★★★)
 
 - [ ] Get the app to be a downloadable link on github to global
+- [ ] Have it give you a AI tip when you start a session based on the last 5-10 sessions or so when you do altum start

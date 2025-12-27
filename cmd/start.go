@@ -130,7 +130,7 @@ After stopping, you'll be prompted for a rating and notes about the session.`,
 			case <-ticker.C:
 				elapsed := time.Since(startTime)
 				minutes := int(elapsed.Minutes())
-				seconds := int(elapsed.Seconds()) % 60
+				seconds := int(elapsed.Seconds()) % 60;
 				fmt.Printf("\rTimer: %02d:%02d", minutes, seconds)
 			}
 		}
