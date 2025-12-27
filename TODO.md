@@ -17,6 +17,9 @@ Top performing days:
 Nov 15: 6.2h (★★★★★)
 Nov 08: 5.8h (★★★★☆)
 Nov 22: 5.1h (★★★★★)
-
+- [ ] Make sure it creats daily note with template if one doesnt already exist
+- [ ] Make better looking log in the daily note
 - [ ] Get the app to be a downloadable link on github to global
-- [ ] Have it give you a AI tip when you start a session based on the last 5-10 sessions or so when you do altum start
+- [ ] Have it give you a AI tip when you start a session based on the last 5-10 sessions or so when you do altum start, becomes like a deepwork coach based on Cal Newport, bit like whoop but for deepwork, API key in the config
+- [ ] Add better questions for logging data like listing distractions, accomplishments, energy levels, improvements for next time any free notes
+- [ ] Have the agent trained on the Cal Newport book
