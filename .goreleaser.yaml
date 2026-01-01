@@ -39,11 +39,6 @@ archives:
       - altum
     formats: [tar.gz]
     name_template: "{{ .ProjectName }}_darwin_all"
-    goos:
-      - darwin
-    goarch:
-      - amd64
-      - arm64
 
 checksum:
   algorithm: sha256
