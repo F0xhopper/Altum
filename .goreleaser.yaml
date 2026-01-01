@@ -41,6 +41,8 @@ archives:
       - altum
     formats: [tar.gz]
     name_template: "{{ .ProjectName }}_darwin_all"
+    files:
+      - dist/altum_darwin_all/altum_darwin_all:altum
 
 checksum:
   algorithm: sha256
