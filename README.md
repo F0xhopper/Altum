@@ -7,8 +7,9 @@ A CLI tool for managing your daily notes.
 Download the universal binary (works on both Intel and Apple Silicon Macs):
 
 ```sh
-# Download the latest release
-curl -LO https://github.com/F0xhopper/Altum/releases/latest/download/altum_darwin_all.tar.gz
+# Get the latest release tag and download
+TAG=$(curl -s https://api.github.com/repos/F0xhopper/Altum/releases/latest | grep '"tag_name":' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
+curl -LO "https://github.com/F0xhopper/Altum/releases/download/${TAG}/altum_darwin_all.tar.gz"
 
 # Extract
 tar -xzf altum_darwin_all.tar.gz
@@ -27,7 +28,8 @@ rm altum_darwin_all.tar.gz
 **One-liner installation:**
 
 ```sh
-curl -LO https://github.com/F0xhopper/Altum/releases/latest/download/altum_darwin_all.tar.gz && \
+TAG=$(curl -s https://api.github.com/repos/F0xhopper/Altum/releases/latest | grep '"tag_name":' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/') && \
+curl -LO "https://github.com/F0xhopper/Altum/releases/download/${TAG}/altum_darwin_all.tar.gz" && \
 tar -xzf altum_darwin_all.tar.gz && \
 chmod +x altum && \
 sudo mv altum /usr/local/bin/altum && \
@@ -38,7 +40,8 @@ altum --version
 **Alternative: Install to user directory (no sudo required):**
 
 ```sh
-curl -LO https://github.com/F0xhopper/Altum/releases/latest/download/altum_darwin_all.tar.gz
+TAG=$(curl -s https://api.github.com/repos/F0xhopper/Altum/releases/latest | grep '"tag_name":' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
+curl -LO "https://github.com/F0xhopper/Altum/releases/download/${TAG}/altum_darwin_all.tar.gz"
 tar -xzf altum_darwin_all.tar.gz
 chmod +x altum
 mkdir -p ~/bin
