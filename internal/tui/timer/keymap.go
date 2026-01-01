@@ -66,11 +66,19 @@ func (k KeyMap) TimerHelp() []key.Binding {
 	return []key.Binding{k.StopTimer, k.Quit}
 }
 
-func (k KeyMap) RatingHelp() []key.Binding {
+func (k KeyMap) MilestoneHelp() []key.Binding {
+	return []key.Binding{k.Continue, k.Quit}
+}
+
+func (k KeyMap) FocusQualityHelp() []key.Binding {
 	return []key.Binding{k.Continue, k.Skip, k.Quit}
 }
 
-func (k KeyMap) NotesHelp() []key.Binding {
+func (k KeyMap) InterruptionsHelp() []key.Binding {
+	return []key.Binding{k.Continue, k.Skip, k.Back, k.Quit}
+}
+
+func (k KeyMap) ReflectionHelp() []key.Binding {
 	return []key.Binding{k.Save, k.Back, k.Quit}
 }
 
@@ -94,12 +102,20 @@ func (k KeyMap) TimerKeyMap() help.KeyMap {
 	return stateKeyMap{bindings: k.TimerHelp()}
 }
 
-func (k KeyMap) RatingKeyMap() help.KeyMap {
-	return stateKeyMap{bindings: k.RatingHelp()}
+func (k KeyMap) MilestoneKeyMap() help.KeyMap {
+	return stateKeyMap{bindings: k.MilestoneHelp()}
 }
 
-func (k KeyMap) NotesKeyMap() help.KeyMap {
-	return stateKeyMap{bindings: k.NotesHelp()}
+func (k KeyMap) FocusQualityKeyMap() help.KeyMap {
+	return stateKeyMap{bindings: k.FocusQualityHelp()}
+}
+
+func (k KeyMap) InterruptionsKeyMap() help.KeyMap {
+	return stateKeyMap{bindings: k.InterruptionsHelp()}
+}
+
+func (k KeyMap) ReflectionKeyMap() help.KeyMap {
+	return stateKeyMap{bindings: k.ReflectionHelp()}
 }
 
 func (k KeyMap) DoneKeyMap() help.KeyMap {

@@ -70,9 +70,13 @@ func (m *model) saveSession() tea.Cmd {
 		minutes := int(m.duration.Minutes())
 		seconds := int(m.duration.Seconds()) % 60
 		entry += fmt.Sprintf("- Duration: %d minutes %d seconds\n", minutes, seconds)
-		entry += fmt.Sprintf("- Rate: %s/10\n", m.rating)
-		if m.notes != "" {
-			entry += fmt.Sprintf("- Notes: %s\n", m.notes)
+		entry += fmt.Sprintf("- Milestone: %s\n", m.milestone)
+		entry += fmt.Sprintf("- Focus Quality: %s/5\n", m.focusQuality)
+		if m.interruptions != "" {
+			entry += fmt.Sprintf("- Interruptions: %s\n", m.interruptions)
+		}
+		if m.reflection != "" {
+			entry += fmt.Sprintf("- Reflection: %s\n", m.reflection)
 		}
 
 		if _, err := file.WriteString(entry); err != nil {
@@ -98,4 +102,3 @@ func (m model) handleSaveError(msg saveErrorMsg) model {
 	m.state = stateDone
 	return m
 }
-

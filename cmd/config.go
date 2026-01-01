@@ -14,13 +14,8 @@ import (
 
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Manage configuration settings",
+	Long:  `Manage configuration settings for Altum.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("config command used")
 	},
@@ -28,17 +23,15 @@ to quickly create a Cobra application.`,
 var configSetCmd = &cobra.Command{
 	Use:   "set [key] [value]",
 	Short: "Set a configuration value",
-	Long: `Set a configuration value. Available keys:
-  - daily_notes_folder_path: Path to the daily notes folder (required)
-  - date_format: Date format for notes (default: 2006-01-02, Obsidian format)`,
-	Args: cobra.ExactArgs(2),
+	Long:  `Set a configuration value. Available keys: daily_notes_folder_path, date_format`,
+	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		key := args[0]
 		value := args[1]
 
 		validKeys := map[string]bool{
 			"daily_notes_folder_path": true,
-			"date_format":        true,
+			"date_format":             true,
 		}
 		if !validKeys[key] {
 			fmt.Fprintf(os.Stderr, "Error: Invalid key '%s'. Valid keys are: daily_notes_folder_path, date_format\n", key)
@@ -75,27 +68,28 @@ var configSetCmd = &cobra.Command{
 	},
 }
 
-	var configGetCmd = &cobra.Command{
-		Use:   "get [key]",
-		Short: "Get a configuration value",
-		Long:  `Get a configuration value. If no key is provided, shows all configuration values.`,
-		Args:  cobra.MaximumNArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
-			if len(args) == 0 {
-				fmt.Println("Current configuration:")
-				fmt.Printf("  daily_notes_folder_path: %s\n", viper.GetString("daily_notes_folder_path"))
-				fmt.Printf("  date_format: %s\n", viper.GetString("date_format"))
+var configGetCmd = &cobra.Command{
+	Use:   "get [key]",
+	Short: "Get a configuration value",
+	Long:  `Get a configuration value. Shows all values if no key is provided.`,
+	Args:  cobra.MaximumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 0 {
+			fmt.Println("Current configuration:")
+			fmt.Printf("  daily_notes_folder_path: %s\n", viper.GetString("daily_notes_folder_path"))
+			fmt.Printf("  date_format: %s\n", viper.GetString("date_format"))
+		} else {
+			key := args[0]
+			value := viper.GetString(key)
+			if value == "" {
+				fmt.Printf("%s is not set\n", key)
 			} else {
-				key := args[0]
-				value := viper.GetString(key)
-				if value == "" {
-					fmt.Printf("%s is not set\n", key)
-				} else {
-					fmt.Printf("%s = %s\n", key, value)
-				}
+				fmt.Printf("%s = %s\n", key, value)
 			}
-		},
-	}
+		}
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(configCmd)
 	configCmd.AddCommand(configSetCmd)
