@@ -23,5 +23,6 @@ Nov 22: 5.1h (★★★★★)
 - [ ] Have it give you a AI tip when you start a session based on the last 5-10 sessions or so when you do altum start, becomes like a deepwork coach based on Cal Newport, bit like whoop but for deepwork, API key in the config
 - [ ] Add better questions for logging data like listing distractions, accomplishments, energy levels, improvements for next time any free notes
 - [ ] Have the agent trained on the Cal Newport book
-- [ ] Add a ascii graph and stats that appear in the chat
-- [ ] Do all with cool ascii art
+- [ ] Create TUI for all stages with cool ascii
+- [ ] Add cool ascii reports for reporting
+- [ ] Potentially add a bubbletea menu when you run altum to select action

@@ -24,8 +24,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-
-
 var cfgFile string
 
 var rootCmd = &cobra.Command{
@@ -37,7 +35,17 @@ examples and usage of using your application. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-}
+	Run: func(cmd *cobra.Command, args []string) {
+		selected := runMenu()
+		switch selected {
+		case menuStart:
+			startCmd.Run(startCmd, []string{})
+		case menuConfig:
+			configCmd.Run(configCmd, []string{})
+		case menuExit:
+			os.Exit(0)
+		}
+	}}
 
 func Execute() {
 	err := rootCmd.Execute()
@@ -68,7 +76,7 @@ func initConfig() {
 		if configHome == "$HOME/.config" {
 			home, _ := os.UserHomeDir()
 			configHome = filepath.Join(home, ".config")
-		}	
+		}
 		altumConfigDir := filepath.Join(configHome, "altum")
 		viper.AddConfigPath(altumConfigDir)
 		viper.SetConfigName("config")
@@ -84,4 +92,3 @@ func initConfig() {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
 }
-
