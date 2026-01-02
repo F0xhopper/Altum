@@ -1,5 +1,5 @@
-- [ ] Fix the copy on the descriptions and helper text
-- [ ] Add on the start command a animation or something then click enter to stop
+- [x] Fix the copy on the descriptions and helper text
+- [x] Add on the start command a animation or something then click enter to stop
 - [x] Try and get the app to write to today's note
 - [ ] Create a report/analyse subcommand with argument of days or months or time frame that prints something like
       Deep Work Report: November 2025
@@ -19,10 +19,13 @@ Nov 08: 5.8h (★★★★☆)
 Nov 22: 5.1h (★★★★★)
 - [ ] Make sure it creats daily note with template if one doesnt already exist
 - [ ] Make better looking log in the daily note
-- [ ] Get the app to be a downloadable link on github to global
+- [x] Get the app to be a downloadable link on github to global
 - [ ] Have it give you a AI tip when you start a session based on the last 5-10 sessions or so when you do altum start, becomes like a deepwork coach based on Cal Newport, bit like whoop but for deepwork, API key in the config
-- [ ] Add better questions for logging data like listing distractions, accomplishments, energy levels, improvements for next time any free notes
+- [x] Add better questions for logging data like listing distractions, accomplishments, energy levels, improvements for next time any free notes
 - [ ] Have the agent trained on the Cal Newport book
-- [ ] Create TUI for all stages with cool ascii
+- [x] Create TUI for all stages with cool ascii
 - [ ] Add cool ascii reports for reporting
 - [ ] Potentially add a bubbletea menu when you run altum to select action
+- [ ] Add version number when doing altum --version to match the release version
+- [ ] Add auto detection of obsidian file or just create a default storage
+- [ ] Add the ability to manually log deep work logs
