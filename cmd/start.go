@@ -11,14 +11,14 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"altum/internal/tui/timer"
+	session "altum/internal/tui/session"
 )
 
 var startCmd = &cobra.Command{
 	Use:   "start",
-	Short: "Start a deep work timer",
-	Long: `Start a timer for a deep work session. The timer will run until you press Enter.
-After stopping, you'll be prompted for a rating and notes about the session.`,
+	Short: "Start a deep work session",
+	Long: `Start a session for a deep work session. The session will run until you press Enter.
+After stopping, you'll be prompted for a rating, interruptions, reflection and notes about the session.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		dailyNotesFolderPath := viper.GetString("daily_notes_folder_path")
 		dateFormat := viper.GetString("date_format")
@@ -30,7 +30,7 @@ After stopping, you'll be prompted for a rating and notes about the session.`,
 			os.Exit(1)
 		}
 
-		m := timer.InitialModel(dailyNotesFolderPath, dateFormat)
+		m := session.InitialModel(dailyNotesFolderPath, dateFormat)
 		p := tea.NewProgram(m, tea.WithAltScreen())
 
 		if _, err := p.Run(); err != nil {

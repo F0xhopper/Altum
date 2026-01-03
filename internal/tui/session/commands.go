@@ -1,7 +1,7 @@
 /*
 Copyright © 2025 Eden Phillips
 */
-package timer
+package session
 
 import (
 	"bufio"

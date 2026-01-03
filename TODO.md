@@ -29,3 +29,4 @@ Nov 22: 5.1h (★★★★★)
 - [ ] Add version number when doing altum --version to match the release version
 - [ ] Add auto detection of obsidian file or just create a default storage
 - [ ] Add the ability to manually log deep work logs
+- [ ] Make the bubbletea more responsive 

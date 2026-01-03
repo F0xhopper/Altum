@@ -30,8 +30,18 @@ var cfgFile string
 
 var rootCmd = &cobra.Command{
 	Use:   "altum",
-	Short: "A deep work companion tool",
-	Long:  `A deep work companion tool.`,
+	Short: "A minimalist CLI deep work companion for focused creators and knowledge workers",
+	Long: `Altum is a minimalist CLI deep work companion for the terminal, built for focused 
+creators and knowledge workers.
+
+Track your deep work sessions with an elegant terminal interface. Altum helps you:
+  • Time and monitor your focused work sessions
+  • Capture milestones, reflections, and interruptions after each session
+  • Automatically log sessions to your daily notes (Obsidian-compatible)
+  • Build awareness of your deep work patterns and habits
+
+The name "Altum" comes from the Latin word meaning "deep" — a fitting name for a tool 
+designed to help you achieve deeper, more meaningful work.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		selected := menu.RunMenu()
 		switch selected {

@@ -1,7 +1,7 @@
 /*
 Copyright © 2025 Eden Phillips
 */
-package timer
+package session
 
 import (
 	"github.com/charmbracelet/bubbles/help"
@@ -9,13 +9,13 @@ import (
 )
 
 type KeyMap struct {
-	Quit      key.Binding
-	StopTimer key.Binding
-	Continue  key.Binding
-	Skip      key.Binding
-	Save      key.Binding
-	Back      key.Binding
-	Exit      key.Binding
+	Quit        key.Binding
+	stopSession key.Binding
+	Continue    key.Binding
+	Skip        key.Binding
+	Save        key.Binding
+	Back        key.Binding
+	Exit        key.Binding
 }
 
 var DefaultKeyMap = KeyMap{
@@ -23,9 +23,9 @@ var DefaultKeyMap = KeyMap{
 		key.WithKeys("ctrl+c", "q"),
 		key.WithHelp("ctrl+c/q", "quit"),
 	),
-	StopTimer: key.NewBinding(
+	stopSession: key.NewBinding(
 		key.WithKeys("enter", " "),
-		key.WithHelp("enter/space", "stop timer"),
+		key.WithHelp("enter/space", "stop session"),
 	),
 	Continue: key.NewBinding(
 		key.WithKeys("enter"),
@@ -55,15 +55,15 @@ func (k KeyMap) ShortHelp() []key.Binding {
 
 func (k KeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
-		{k.Quit, k.StopTimer},
+		{k.Quit, k.stopSession},
 		{k.Continue, k.Skip},
 		{k.Save, k.Back},
 		{k.Exit},
 	}
 }
 
-func (k KeyMap) TimerHelp() []key.Binding {
-	return []key.Binding{k.StopTimer, k.Quit}
+func (k KeyMap) sessionHelp() []key.Binding {
+	return []key.Binding{k.stopSession, k.Quit}
 }
 
 func (k KeyMap) MilestoneHelp() []key.Binding {
@@ -98,8 +98,8 @@ func (k stateKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{k.bindings}
 }
 
-func (k KeyMap) TimerKeyMap() help.KeyMap {
-	return stateKeyMap{bindings: k.TimerHelp()}
+func (k KeyMap) sessionKeyMap() help.KeyMap {
+	return stateKeyMap{bindings: k.sessionHelp()}
 }
 
 func (k KeyMap) MilestoneKeyMap() help.KeyMap {
@@ -125,4 +125,3 @@ func (k KeyMap) DoneKeyMap() help.KeyMap {
 func (k KeyMap) SavingKeyMap() help.KeyMap {
 	return stateKeyMap{bindings: []key.Binding{k.Quit}}
 }
-

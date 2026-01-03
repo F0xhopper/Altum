@@ -1,7 +1,7 @@
 /*
 Copyright © 2025 Eden Phillips
 */
-package timer
+package session
 
 import (
 	"fmt"
@@ -18,7 +18,7 @@ import (
 type sessionState int
 
 const (
-	stateTimer sessionState = iota
+	stateSession sessionState = iota
 	stateMilestone
 	stateFocusQuality
 	stateInterruptions
@@ -80,7 +80,7 @@ func InitialModel(dailyNotesPath, dateFormat string) model {
 	h.Width = 80
 
 	return model{
-		state:              stateTimer,
+		state:              stateSession,
 		stopwatch:          sw,
 		spinner:            s,
 		milestoneInput:     milestoneInput,
@@ -118,11 +118,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tea.KeyMsg:
 		switch m.state {
-		case stateTimer:
+		case stateSession:
 			switch {
 			case key.Matches(msg, m.keyMap.Quit):
 				return m, tea.Quit
-			case key.Matches(msg, m.keyMap.StopTimer):
+			case key.Matches(msg, m.keyMap.stopSession):
 				m.state = stateMilestone
 				m.duration = m.stopwatch.Elapsed()
 				m.stopwatch.Stop()
@@ -213,7 +213,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	switch m.state {
-	case stateTimer:
+	case stateSession:
 		m.stopwatch, cmd = m.stopwatch.Update(msg)
 		cmds = append(cmds, cmd)
 		m.spinner, cmd = m.spinner.Update(msg)
@@ -246,22 +246,22 @@ func (m model) View() string {
 	var s string
 
 	switch m.state {
-	case stateTimer:
+	case stateSession:
 		elapsed := m.stopwatch.Elapsed()
 		minutes := int(elapsed.Minutes())
 		seconds := int(elapsed.Seconds()) % 60
 		hours := int(elapsed.Hours())
 
-		timerDisplay := fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+		sessionTimerDisplay := fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
 		if hours == 0 {
-			timerDisplay = fmt.Sprintf("%02d:%02d", minutes, seconds)
+			sessionTimerDisplay = fmt.Sprintf("%02d:%02d", minutes, seconds)
 		}
 
 		s += TitleStyle.Render("Deep Work Session")
 		s += "\n\n"
-		s += TimerStyle.Render(m.spinner.View() + " " + fmt.Sprintf("%s", timerDisplay))
+		s += SessionTimerStyle.Render(m.spinner.View() + " " + fmt.Sprintf("%s", sessionTimerDisplay))
 		s += "\n\n"
-		s += m.help.View(m.keyMap.TimerKeyMap())
+		s += m.help.View(m.keyMap.sessionKeyMap())
 
 	case stateMilestone:
 		s += TitleStyle.Render("Session Milestone")
