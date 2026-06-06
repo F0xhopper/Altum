@@ -18,12 +18,12 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"altum/internal/tui/menu"
+	"altum/internal/config"
+	"altum/internal/menu"
 )
 
 var cfgFile string
@@ -76,26 +76,8 @@ func init() {
 }
 
 func initConfig() {
-	if cfgFile != "" {
-		viper.SetConfigFile(cfgFile)
-	} else {
-		configHome := os.ExpandEnv("$HOME/.config")
-		if configHome == "$HOME/.config" {
-			home, _ := os.UserHomeDir()
-			configHome = filepath.Join(home, ".config")
-		}
-		altumConfigDir := filepath.Join(configHome, "altum")
-		viper.AddConfigPath(altumConfigDir)
-		viper.SetConfigName("config")
-		viper.SetConfigType("yaml")
-	}
-
-	viper.SetEnvPrefix("ALTUM")
-	viper.AutomaticEnv()
-
-	viper.SetDefault("date_format", "2006-01-02")
-
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+	if err := config.InitConfig(cfgFile); err != nil {
+		fmt.Fprintf(os.Stderr, "Error initializing config: %v\n", err)
+		os.Exit(1)
 	}
 }
