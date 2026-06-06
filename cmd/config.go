@@ -1,15 +1,12 @@
-/*
-Copyright © 2025 Eden Phillips
-*/
 package cmd
 
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+
+	"altum/internal/config"
 )
 
 var configCmd = &cobra.Command{
@@ -20,6 +17,7 @@ var configCmd = &cobra.Command{
 		fmt.Println("config command used")
 	},
 }
+
 var configSetCmd = &cobra.Command{
 	Use:   "set [key] [value]",
 	Short: "Set a configuration value",
@@ -29,37 +27,14 @@ var configSetCmd = &cobra.Command{
 		key := args[0]
 		value := args[1]
 
-		validKeys := map[string]bool{
-			"daily_notes_folder_path": true,
-			"date_format":             true,
-		}
-		if !validKeys[key] {
-			fmt.Fprintf(os.Stderr, "Error: Invalid key '%s'. Valid keys are: daily_notes_folder_path, date_format\n", key)
+		if err := config.SetConfigValue(key, value); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
 
-		configHome := os.ExpandEnv("$HOME/.config")
-		if configHome == "$HOME/.config" {
-			home, _ := os.UserHomeDir()
-			configHome = filepath.Join(home, ".config")
-		}
-		altumConfigDir := filepath.Join(configHome, "altum")
-		configFile := filepath.Join(altumConfigDir, "config.yaml")
-
-		if err := os.MkdirAll(altumConfigDir, 0755); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: Failed to create config directory: %v\n", err)
-			os.Exit(1)
-		}
-
-		viper.SetConfigFile(configFile)
-		viper.SetConfigType("yaml")
-		if err := viper.ReadInConfig(); err != nil {
-		}
-
-		viper.Set(key, value)
-
-		if err := viper.WriteConfigAs(configFile); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: Failed to write config file: %v\n", err)
+		configFile, err := config.GetConfigFilePath()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
 
@@ -76,11 +51,13 @@ var configGetCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			fmt.Println("Current configuration:")
-			fmt.Printf("  daily_notes_folder_path: %s\n", viper.GetString("daily_notes_folder_path"))
-			fmt.Printf("  date_format: %s\n", viper.GetString("date_format"))
+			allValues := config.GetAllConfigValues()
+			for key, value := range allValues {
+				fmt.Printf("  %s: %s\n", key, value)
+			}
 		} else {
 			key := args[0]
-			value := viper.GetString(key)
+			value := config.GetConfigValue(key)
 			if value == "" {
 				fmt.Printf("%s is not set\n", key)
 			} else {
