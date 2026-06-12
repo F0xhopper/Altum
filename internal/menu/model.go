@@ -93,7 +93,7 @@ func (m model) View() string {
 
 	items := []string{
 		"Start Deep Work Session",
-		"️Configure Settings",
+		"Configure Settings",
 		"Exit",
 	}
 
