@@ -14,7 +14,7 @@ var configCmd = &cobra.Command{
 	Short: "Manage configuration settings",
 	Long:  `Manage configuration settings for Altum.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("config command used")
+		cmd.Help()
 	},
 }
 

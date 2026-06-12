@@ -5,6 +5,7 @@ package session
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/charmbracelet/bubbles/help"
@@ -37,15 +38,15 @@ type model struct {
 	help               help.Model
 	keyMap             KeyMap
 	spinner            spinner.Model
-	startTime    time.Time
-	duration     time.Duration
-	milestone    string
-	focusQuality string
-	interruptions string
-	reflection   string
-	dbPath       string
-	sessionCount int
-	err          error
+	startTime          time.Time
+	duration           time.Duration
+	milestone          string
+	focusQuality       string
+	interruptions      string
+	reflection         string
+	dbPath             string
+	sessionCount       int
+	err                error
 }
 
 func InitialModel(dbPath string) model {
@@ -55,22 +56,32 @@ func InitialModel(dbPath string) model {
 	sw.Start()
 
 	milestoneInput := textinput.New()
-	milestoneInput.Placeholder = "What concrete outcome or milestone did you achieve?"
+	milestoneInput.Placeholder = "Describe what you accomplished..."
 	milestoneInput.CharLimit = 200
 	milestoneInput.Width = 80
 
 	focusQualityInput := textinput.New()
-	focusQualityInput.Placeholder = "Rate focus quality (1-5, optional, default 3)"
+	focusQualityInput.Placeholder = "1–5 (default 3)"
 	focusQualityInput.CharLimit = 1
 	focusQualityInput.Width = 80
+	focusQualityInput.Validate = func(s string) error {
+		if s == "" {
+			return nil
+		}
+		n, err := strconv.Atoi(s)
+		if err != nil || n < 1 || n > 5 {
+			return fmt.Errorf("must be 1–5")
+		}
+		return nil
+	}
 
 	interruptionsInput := textinput.New()
-	interruptionsInput.Placeholder = "Any interruptions or distractions worth noting? (optional)"
+	interruptionsInput.Placeholder = "e.g. Slack notifications, phone call... (optional)"
 	interruptionsInput.CharLimit = 200
 	interruptionsInput.Width = 80
 
 	reflectionInput := textinput.New()
-	reflectionInput.Placeholder = "Quick reflection / what went well or to improve? (optional)"
+	reflectionInput.Placeholder = "What went well? What to improve? (optional)"
 	reflectionInput.CharLimit = 200
 	reflectionInput.Width = 80
 
@@ -86,11 +97,24 @@ func InitialModel(dbPath string) model {
 		interruptionsInput: interruptionsInput,
 		reflectionInput:    reflectionInput,
 		help:               h,
-		keyMap:       DefaultKeyMap,
-		startTime:    time.Now(),
-		dbPath:       dbPath,
-		focusQuality: "3",
+		keyMap:             DefaultKeyMap,
+		startTime:          time.Now(),
+		dbPath:             dbPath,
+		focusQuality:       "3",
 	}
+}
+
+func (m model) stepInfo() (int, int) {
+	steps := map[sessionState]int{
+		stateMilestone:     1,
+		stateFocusQuality:  2,
+		stateInterruptions: 3,
+		stateReflection:    4,
+	}
+	if step, ok := steps[m.state]; ok {
+		return step, 4
+	}
+	return 0, 0
 }
 
 func (m model) Init() tea.Cmd {
@@ -216,6 +240,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.spinner, cmd = m.spinner.Update(msg)
 		cmds = append(cmds, cmd)
 
+	case stateSaving:
+		m.spinner, cmd = m.spinner.Update(msg)
+		cmds = append(cmds, cmd)
+
 	case stateMilestone:
 		m.milestoneInput, cmd = m.milestoneInput.Update(msg)
 		cmds = append(cmds, cmd)
@@ -245,23 +273,27 @@ func (m model) View() string {
 	switch m.state {
 	case stateSession:
 		elapsed := m.stopwatch.Elapsed()
-		minutes := int(elapsed.Minutes())
-		seconds := int(elapsed.Seconds()) % 60
 		hours := int(elapsed.Hours())
+		minutes := int(elapsed.Minutes()) % 60
+		seconds := int(elapsed.Seconds()) % 60
 
-		sessionTimerDisplay := fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+		var sessionTimerDisplay string
 		if hours == 0 {
 			sessionTimerDisplay = fmt.Sprintf("%02d:%02d", minutes, seconds)
+		} else {
+			sessionTimerDisplay = fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
 		}
 
 		s += TitleStyle.Render("Deep Work Session")
 		s += "\n\n"
-		s += SessionTimerStyle.Render(m.spinner.View() + " " + fmt.Sprintf("%s", sessionTimerDisplay))
+		s += SessionTimerStyle.Render(m.spinner.View() + " " + sessionTimerDisplay)
 		s += "\n\n"
 		s += m.help.View(m.keyMap.sessionKeyMap())
 
 	case stateMilestone:
+		step, total := m.stepInfo()
 		s += TitleStyle.Render("Session Milestone")
+		s += StepStyle.Render(fmt.Sprintf("  step %d of %d", step, total))
 		s += "\n\n"
 		s += "What concrete outcome or milestone did you achieve?\n"
 		if m.milestoneInput.Focused() {
@@ -273,7 +305,9 @@ func (m model) View() string {
 		s += m.help.View(m.keyMap.MilestoneKeyMap())
 
 	case stateFocusQuality:
+		step, total := m.stepInfo()
 		s += TitleStyle.Render("Focus Quality")
+		s += StepStyle.Render(fmt.Sprintf("  step %d of %d", step, total))
 		s += "\n\n"
 		s += "How would you rate your focus quality? (1–5)\n"
 		s += "(optional, default 3 if skipped)\n\n"
@@ -286,7 +320,9 @@ func (m model) View() string {
 		s += m.help.View(m.keyMap.FocusQualityKeyMap())
 
 	case stateInterruptions:
+		step, total := m.stepInfo()
 		s += TitleStyle.Render("Interruptions")
+		s += StepStyle.Render(fmt.Sprintf("  step %d of %d", step, total))
 		s += "\n\n"
 		s += "Any interruptions or distractions worth noting?\n"
 		s += "(optional)\n\n"
@@ -299,10 +335,12 @@ func (m model) View() string {
 		s += m.help.View(m.keyMap.InterruptionsKeyMap())
 
 	case stateReflection:
+		step, total := m.stepInfo()
 		s += TitleStyle.Render("Reflection")
+		s += StepStyle.Render(fmt.Sprintf("  step %d of %d", step, total))
 		s += "\n\n"
 		s += "Quick reflection / what went well or to improve?\n"
-		s += "(optional, free text)\n\n"
+		s += "(optional)\n\n"
 		if m.reflectionInput.Focused() {
 			s += FocusedStyle.Render(m.reflectionInput.View())
 		} else {
@@ -314,11 +352,7 @@ func (m model) View() string {
 	case stateSaving:
 		s += TitleStyle.Render("Saving Session...")
 		s += "\n\n"
-		if m.err != nil {
-			s += ErrorStyle.Render(fmt.Sprintf("Error: %v", m.err))
-		} else {
-			s += SuccessStyle.Render("Session saved successfully!")
-		}
+		s += m.spinner.View() + " Saving your session..."
 		s += "\n\n"
 		s += m.help.View(m.keyMap.SavingKeyMap())
 
@@ -330,9 +364,16 @@ func (m model) View() string {
 		} else {
 			s += SuccessStyle.Render(fmt.Sprintf("Session #%d saved to database", m.sessionCount))
 			s += "\n\n"
-			minutes := int(m.duration.Minutes())
-			seconds := int(m.duration.Seconds()) % 60
-			s += fmt.Sprintf("Duration: %d minutes %d seconds\n", minutes, seconds)
+			durationHours := int(m.duration.Hours())
+			durationMins := int(m.duration.Minutes()) % 60
+			durationSecs := int(m.duration.Seconds()) % 60
+			var durationStr string
+			if durationHours > 0 {
+				durationStr = fmt.Sprintf("%dh %dm %ds", durationHours, durationMins, durationSecs)
+			} else {
+				durationStr = fmt.Sprintf("%dm %ds", durationMins, durationSecs)
+			}
+			s += fmt.Sprintf("Duration: %s\n", durationStr)
 		}
 		s += "\n"
 		s += m.help.View(m.keyMap.DoneKeyMap())

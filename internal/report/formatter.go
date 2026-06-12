@@ -128,7 +128,7 @@ func PrintReport(sessions []Session, days int) {
 	for i := 0; i < topDays; i++ {
 		stats := dayStats[i]
 		hours := stats.Duration.Hours()
-		stars := int(hours * 5 / 8)
+		stars := int(hours * 5 / 3)
 		if stars > 5 {
 			stars = 5
 		}
