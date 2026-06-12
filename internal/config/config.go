@@ -23,9 +23,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+// ValidConfigKeys is the set of keys accepted by `altum config set`.
+// db_path overrides the default SQLite database location.
 var ValidConfigKeys = map[string]bool{
-	"daily_notes_folder_path": true,
-	"date_format":             true,
+	"db_path": true,
 }
 
 func IsValidKey(key string) bool {
@@ -54,7 +55,7 @@ func GetConfigFilePath() (string, error) {
 
 func SetConfigValue(key, value string) error {
 	if !IsValidKey(key) {
-		return fmt.Errorf("invalid key '%s'. Valid keys are: daily_notes_folder_path, date_format", key)
+		return fmt.Errorf("invalid key '%s'. Valid keys are: db_path", key)
 	}
 
 	configDir, err := GetConfigDir()
@@ -90,7 +91,6 @@ func GetConfigValue(key string) string {
 
 func GetAllConfigValues() map[string]string {
 	return map[string]string{
-		"daily_notes_folder_path": viper.GetString("daily_notes_folder_path"),
-		"date_format":             viper.GetString("date_format"),
+		"db_path": viper.GetString("db_path"),
 	}
 }

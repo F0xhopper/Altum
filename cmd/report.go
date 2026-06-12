@@ -1,3 +1,6 @@
+/*
+Copyright © 2025 Eden Phillips
+*/
 package cmd
 
 import (
@@ -7,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	"altum/internal/db"
 	"altum/internal/report"
 )
 
@@ -17,23 +21,19 @@ var reportCmd = &cobra.Command{
 	Short: "Generate a report of your deep work sessions",
 	Long:  `Generate a report of your deep work sessions for the last N days. Shows statistics including total sessions, time spent, average ratings, and more.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		dailyNotesFolderPath := viper.GetString("daily_notes_folder_path")
-		dateFormat := viper.GetString("date_format")
-
-		if dailyNotesFolderPath == "" {
-			fmt.Fprintf(os.Stderr, "Error: daily_notes_folder_path is required. Please set it using:\n")
-			fmt.Fprintf(os.Stderr, "  altum config set daily_notes_folder_path <folder_path>\n")
-			fmt.Fprintf(os.Stderr, "  or use --daily_notes_folder_path flag\n")
-			os.Exit(1)
+		dbPath := viper.GetString("db_path")
+		if dbPath == "" {
+			var err error
+			dbPath, err = db.DefaultPath()
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error resolving database path: %v\n", err)
+				os.Exit(1)
+			}
 		}
 
-		if dateFormat == "" {
-			dateFormat = "2006-01-02"
-		}
-
-		sessions, err := report.ParseSessions(dailyNotesFolderPath, dateFormat, daysFlag)
+		sessions, err := report.ParseSessions(dbPath, daysFlag)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error parsing sessions: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Error reading sessions: %v\n", err)
 			os.Exit(1)
 		}
 
