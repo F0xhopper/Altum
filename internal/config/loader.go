@@ -44,8 +44,6 @@ func InitConfig(cfgFile string) error {
 	viper.SetEnvPrefix("ALTUM")
 	viper.AutomaticEnv()
 
-	viper.SetDefault("date_format", "2006-01-02")
-
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}

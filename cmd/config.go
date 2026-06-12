@@ -21,7 +21,7 @@ var configCmd = &cobra.Command{
 var configSetCmd = &cobra.Command{
 	Use:   "set [key] [value]",
 	Short: "Set a configuration value",
-	Long:  `Set a configuration value. Available keys: daily_notes_folder_path, date_format`,
+	Long:  `Set a configuration value. Available keys: db_path`,
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		key := args[0]

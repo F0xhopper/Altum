@@ -37,20 +37,18 @@ type model struct {
 	help               help.Model
 	keyMap             KeyMap
 	spinner            spinner.Model
-	startTime          time.Time
-	duration           time.Duration
-	milestone          string
-	focusQuality       string
-	interruptions      string
-	reflection         string
-	dailyNotesPath     string
-	dateFormat         string
-	sessionCount       int
-	noteFilePath       string
-	err                error
+	startTime    time.Time
+	duration     time.Duration
+	milestone    string
+	focusQuality string
+	interruptions string
+	reflection   string
+	dbPath       string
+	sessionCount int
+	err          error
 }
 
-func InitialModel(dailyNotesPath, dateFormat string) model {
+func InitialModel(dbPath string) model {
 	s := spinner.New()
 
 	sw := stopwatch.NewWithInterval(time.Second)
@@ -88,11 +86,10 @@ func InitialModel(dailyNotesPath, dateFormat string) model {
 		interruptionsInput: interruptionsInput,
 		reflectionInput:    reflectionInput,
 		help:               h,
-		keyMap:             DefaultKeyMap,
-		startTime:          time.Now(),
-		dailyNotesPath:     dailyNotesPath,
-		dateFormat:         dateFormat,
-		focusQuality:       "3",
+		keyMap:       DefaultKeyMap,
+		startTime:    time.Now(),
+		dbPath:       dbPath,
+		focusQuality: "3",
 	}
 }
 
@@ -331,7 +328,7 @@ func (m model) View() string {
 		if m.err != nil {
 			s += ErrorStyle.Render(fmt.Sprintf("Error saving session: %v", m.err))
 		} else {
-			s += SuccessStyle.Render(fmt.Sprintf("Session logged to: %s", m.noteFilePath))
+			s += SuccessStyle.Render(fmt.Sprintf("Session #%d saved to database", m.sessionCount))
 			s += "\n\n"
 			minutes := int(m.duration.Minutes())
 			seconds := int(m.duration.Seconds()) % 60

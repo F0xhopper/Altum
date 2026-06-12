@@ -31,16 +31,16 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "altum",
 	Short: "A minimalist CLI deep work companion for focused creators and knowledge workers",
-	Long: `Altum is a minimalist CLI deep work companion for the terminal, built for focused 
+	Long: `Altum is a minimalist CLI deep work companion for the terminal, built for focused
 creators and knowledge workers.
 
 Track your deep work sessions with an elegant terminal interface. Altum helps you:
   • Time and monitor your focused work sessions
   • Capture milestones, reflections, and interruptions after each session
-  • Automatically log sessions to your daily notes (Obsidian-compatible)
+  • Automatically log sessions to a local SQLite database
   • Build awareness of your deep work patterns and habits
 
-The name "Altum" comes from the Latin word meaning "deep" — a fitting name for a tool 
+The name "Altum" comes from the Latin word meaning "deep" — a fitting name for a tool
 designed to help you achieve deeper, more meaningful work.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		selected := menu.RunMenu()
@@ -64,15 +64,10 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.altum.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/altum/config.yaml)")
 
-	rootCmd.PersistentFlags().String("daily_notes_folder_path", "", "Path to the daily notes folder (required)")
-	rootCmd.PersistentFlags().String("date_format", "2006-01-02", "Date format for notes (Obsidian format)")
-
-	viper.BindPFlag("daily_notes_folder_path", rootCmd.PersistentFlags().Lookup("daily_notes_folder_path"))
-	viper.BindPFlag("date_format", rootCmd.PersistentFlags().Lookup("date_format"))
-
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.PersistentFlags().String("db_path", "", "Path to the SQLite database file (default: platform data dir)")
+	viper.BindPFlag("db_path", rootCmd.PersistentFlags().Lookup("db_path"))
 }
 
 func initConfig() {
