@@ -10,6 +10,7 @@ import (
 
 type KeyMap struct {
 	Quit        key.Binding
+	QuitInput   key.Binding
 	stopSession key.Binding
 	Continue    key.Binding
 	Skip        key.Binding
@@ -22,6 +23,11 @@ var DefaultKeyMap = KeyMap{
 	Quit: key.NewBinding(
 		key.WithKeys("ctrl+c", "q"),
 		key.WithHelp("ctrl+c/q", "quit"),
+	),
+	// ctrl+c only: states with a focused text input must leave "q" typeable
+	QuitInput: key.NewBinding(
+		key.WithKeys("ctrl+c"),
+		key.WithHelp("ctrl+c", "quit"),
 	),
 	stopSession: key.NewBinding(
 		key.WithKeys("enter", " "),
@@ -67,19 +73,19 @@ func (k KeyMap) sessionHelp() []key.Binding {
 }
 
 func (k KeyMap) MilestoneHelp() []key.Binding {
-	return []key.Binding{k.Continue, k.Quit}
+	return []key.Binding{k.Continue, k.QuitInput}
 }
 
 func (k KeyMap) FocusQualityHelp() []key.Binding {
-	return []key.Binding{k.Continue, k.Skip, k.Quit}
+	return []key.Binding{k.Continue, k.Skip, k.QuitInput}
 }
 
 func (k KeyMap) InterruptionsHelp() []key.Binding {
-	return []key.Binding{k.Continue, k.Skip, k.Back, k.Quit}
+	return []key.Binding{k.Continue, k.Skip, k.Back, k.QuitInput}
 }
 
 func (k KeyMap) ReflectionHelp() []key.Binding {
-	return []key.Binding{k.Save, k.Back, k.Quit}
+	return []key.Binding{k.Save, k.Back, k.QuitInput}
 }
 
 func (k KeyMap) DoneHelp() []key.Binding {

@@ -153,7 +153,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case stateMilestone:
 			switch {
-			case key.Matches(msg, m.keyMap.Quit):
+			case key.Matches(msg, m.keyMap.QuitInput):
 				return m, tea.Quit
 			case key.Matches(msg, m.keyMap.Continue):
 				m.milestone = m.milestoneInput.Value()
@@ -168,7 +168,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case stateFocusQuality:
 			switch {
-			case key.Matches(msg, m.keyMap.Quit):
+			case key.Matches(msg, m.keyMap.QuitInput):
 				return m, tea.Quit
 			case key.Matches(msg, m.keyMap.Continue):
 				value := m.focusQualityInput.Value()
@@ -190,7 +190,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case stateInterruptions:
 			switch {
-			case key.Matches(msg, m.keyMap.Quit):
+			case key.Matches(msg, m.keyMap.QuitInput):
 				return m, tea.Quit
 			case key.Matches(msg, m.keyMap.Continue):
 				m.interruptions = m.interruptionsInput.Value()
@@ -212,7 +212,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case stateReflection:
 			switch {
-			case key.Matches(msg, m.keyMap.Quit):
+			case key.Matches(msg, m.keyMap.QuitInput):
 				return m, tea.Quit
 			case key.Matches(msg, m.keyMap.Save):
 				m.reflection = m.reflectionInput.Value()
