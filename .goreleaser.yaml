@@ -19,8 +19,10 @@ builds:
   - env:
       - CGO_ENABLED=0
     main: ./cmd/altum
+    binary: altum
     goos:
       - darwin
+      - linux
 
 archives:
   - formats: [tar.gz]
