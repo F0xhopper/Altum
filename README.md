@@ -7,7 +7,7 @@ work sessions, walks you through a short review when you stop, and keeps
 everything in a local SQLite database so you can see how your deep work adds
 up over time.
 
-The name comes from the Latin *altum* — "deep".
+The name comes from the Latin *altum*, "deep".
 
 ![Altum demo](assets/demo.gif)
 
