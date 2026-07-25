@@ -79,7 +79,7 @@ During a session:
 | Key | Action |
 | --- | --- |
 | `enter` / `space` | Stop the session and begin the review |
-| `ctrl+c` | Quit without saving |
+| `ctrl+c` / `q` | Quit without saving |
 
 During the review:
 
