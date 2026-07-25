@@ -22,8 +22,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"altum/internal/config"
-	"altum/internal/menu"
+	"github.com/F0xhopper/Altum/internal/config"
+	"github.com/F0xhopper/Altum/internal/menu"
 )
 
 var cfgFile string

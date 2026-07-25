@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "altum/cmd"
+import "github.com/F0xhopper/Altum/cmd"
 
 func main() {
 	cmd.Execute()

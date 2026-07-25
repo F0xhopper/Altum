@@ -6,7 +6,7 @@ package session
 import (
 	"time"
 
-	"altum/internal/db"
+	"github.com/F0xhopper/Altum/internal/db"
 
 	tea "github.com/charmbracelet/bubbletea"
 )

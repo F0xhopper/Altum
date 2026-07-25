@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"altum/internal/db"
+	"github.com/F0xhopper/Altum/internal/db"
 )
 
 // ParseSessions opens the database at dbPath and returns all sessions

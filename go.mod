@@ -1,4 +1,4 @@
-module altum
+module github.com/F0xhopper/Altum
 
 go 1.25.0
 
@@ -8,6 +8,7 @@ require (
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
+	modernc.org/sqlite v1.52.0
 )
 
 require (
@@ -47,5 +48,4 @@ require (
 	modernc.org/libc v1.72.3 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
-	modernc.org/sqlite v1.52.0 // indirect
 )

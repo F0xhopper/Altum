@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"altum/internal/config"
+	"github.com/F0xhopper/Altum/internal/config"
 )
 
 var configCmd = &cobra.Command{

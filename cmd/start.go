@@ -11,8 +11,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"altum/internal/db"
-	session "altum/internal/session"
+	"github.com/F0xhopper/Altum/internal/db"
+	session "github.com/F0xhopper/Altum/internal/session"
 )
 
 var startCmd = &cobra.Command{
